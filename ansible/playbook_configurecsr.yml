@@ -1,0 +1,40 @@
+---
+- name: Configure CSR
+  hosts: 192.168.103.207
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: Configure Gigabit 2 interface with static IP
+      ios_command:
+        commands:
+          - interface GigabitEthernet2
+          - description Interface 2
+          - ip address 192.168.2.1 255.255.255.0
+          - no shutdown
+      register: gigabit2_result
+
+    - name: Configure Gigabit 3 interface with static IP
+      ios_command:
+        commands:
+          - interface GigabitEthernet3
+          - description Interface 3
+          - ip address 192.168.3.1 255.255.255.0
+          - no shutdown
+      register: gigabit3_result
+
+    - name: Configure Gigabit 4 interface with static IP
+      ios_command:
+        commands:
+          - interface GigabitEthernet4
+          - description Interface 4
+          - ip address 192.168.4.1 255.255.255.0
+          - no shutdown
+      register: gigabit4_result
+
+  post_tasks:
+    - name: Print Play Recap
+      debug:
+        var: ansible_play_batch | map('extract', hostvars, 'ansible_facts.ansible_host') | list
+      run_once: true
+
