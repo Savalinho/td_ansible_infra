@@ -1,0 +1,12 @@
+- name: ConfigDHCP
+  hosts: csr1000
+  gather_facts: false
+
+
+  tasks:
+     - name: dhcp pool config
+       cisco.ios.ios_config:
+           lines: 
+            - network 192.168.2.0 255.255.255.0
+            - default-router 192.168.2.1
+           parents: ip dhcp pool pooltest1

@@ -1,0 +1,11 @@
+- name: No DHCP
+  hosts: csr1000
+  gather_facts: false
+
+
+  tasks: 
+   - name: Pas de DHCP
+     cisco.ios.ios_command:
+         commands:
+         - conf t
+         - no ip dhcp pool pooltest1
