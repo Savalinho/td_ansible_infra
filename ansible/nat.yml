@@ -1,0 +1,32 @@
+- name: Config Nat
+  hosts: csr1000
+  gather_facts: false
+  
+  tasks:
+    - name: Configurer le nat
+      cisco.ios.ios_config:
+        lines:
+          - access-list 2 permit 192.168.{{ item }}.0 0.0.0.255
+      loop:
+          - 2
+          - 3
+          - 4
+ 
+    - name: pool nat
+      cisco.ios.ios_config:
+           lines:
+           - ip nat inside source list 2 interface g1 overload
+   
+    - name: configurer le nat 
+      cisco.ios.ios_config:
+         lines: ip nat outside
+         parents: int g1
+
+    - name: config nat inside
+      cisco.ios.ios_config :
+        lines: ip nat inside
+        parents: int {{ item }}
+      loop:
+        - g2
+        - g3
+        - g4
